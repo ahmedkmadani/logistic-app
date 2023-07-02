@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Shipment</h1>
+            <!-- <a data-toggle="modal" data-target="#OrderModal" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Add new Order</a> -->
+        </div>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Shipment Number</th>
+                                <th>Shipment driver</th>
+                                <th>Shipment order</th>
+                                <th>Shipment status</th>
+                                <th>Edit status</th>
+                                <th>Created at</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shipment in data %}
+                            <tr>
+                                <td>{{ shipment.shipment_number }}</td>
+                                <td>{{ shipment.driver }}</td>
+                                <td>{{ shipment.order }}</td>
+                                <td>{{ shipment.shipment_status }}</td>
+                                <td>
+                                  <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal"
+                                      data-target="#editStatusModal{{ shipment.pk }}"><i class="fas fa-edit fa-sm text-white-50"></i>
+                                      Edit Status </button>
+                              </td>
+                                <td>{{ shipment.created_at }}</td>
+                            </tr>
+
+                            <div class="modal fade" id="editStatusModal{{ shipment.pk }}" tabindex="-1" role="dialog" aria-labelledby="editStatusModalLabel{{ order.pk }}" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title" id="editStatusModalLabel{{ shipment.pk }}">Edit Status</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                          </button>
+                                      </div>
+                                      <div class="modal-body">
+                                          <!-- Place your form elements here -->
+                                          <form id="editStatusForm{{ shipment.pk }}" action="{% url 'update_shipment' shipment.pk %}" method="POST">
+                                              {% csrf_token %}
+                                              <div class="form-group">
+                                                  <label for="exampleFormControlSelect1">Edit Shipment Status:</label>
+                                                  <select class="form-control" id="exampleFormControlSelect1" name="status">
+                                                    {% for status in status %}
+                                                      <option value="{{ status.pk }}">{{ status.status }}</option>
+                                                      {% endfor %}
+                                                  </select>
+                                              </div>
+                                              <div class="modal-footer">
+                                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                                              </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="OrderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Order Form</h4>
+        </div>
+        <div class="modal-body">
+          <!-- Add the form here -->
+          <form method="post" action="{% url 'order' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+              $(document).ready(function() {
+                var $regionSelect = $('#id_recipient_region');
+                var $neighborhoodSelect = $('#id_recipient_neighborhood');
+          
+                // Disable the neighborhood select initially
+                $neighborhoodSelect.prop('disabled', true);
+          
+                $regionSelect.change(function() {
+                  var regionId = $(this).val();
+          
+                  // Reset the neighborhood select options
+                  $neighborhoodSelect.empty();
+          
+                  if (regionId) {
+                    // Enable the neighborhood select
+                    $neighborhoodSelect.prop('disabled', false);
+          
+                    // Fetch the neighborhoods for the selected region using AJAX
+                    $.getJSON('/get_neighborhoods/', {region_id: regionId}, function(response) {
+                      if (response.neighborhoods.length > 0) {
+                        $.each(response.neighborhoods, function(index, neighborhood) {
+                          $neighborhoodSelect.append('<option value="' + neighborhood.id + '">' + neighborhood.name + '</option>');
+                        });
+                      } else {
+                        $neighborhoodSelect.append('<option value="">No neighborhoods found</option>');
+                      }
+                    });
+                  } else {
+                    // Disable the neighborhood select if no region is selected
+                    $neighborhoodSelect.prop('disabled', true);
+                  }
+                });
+              });
+            </script>
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field_errors in form.errors.values %}
+                        {% for error in field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+    {% endblock content %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Neighbourhood</h1>
+            <a data-toggle="modal" data-target="#NeighbourhoodModal" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Add new Neighbourhood</a>
+        </div>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Neighbourhood Name</th>
+                                <th>Neighbourhood Region</th>
+                                <th>Created at</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for neighbourhood in data %}
+                            <tr>
+                                <td>{{ neighbourhood.name }}</td>
+                                <td>{{ neighbourhood.region }}</td>
+                                <td>{{ neighbourhood.created_at }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- /.container-fluid -->
+
+    <!-- my_template.html -->
+
+<!-- Add your HTML code here -->
+
+<!-- Modal -->
+<div class="modal fade" id="NeighbourhoodModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Neighbourhood Form</h4>
+        </div>
+        <div class="modal-body">
+          <!-- Add the form here -->
+          <form method="post" action="{% url 'neighborhood' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field_errors in form.errors.values %}
+                        {% for error in field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Add your HTML code here -->
+  
+
+    {% endblock content %}
