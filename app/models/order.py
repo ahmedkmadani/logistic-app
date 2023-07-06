@@ -5,21 +5,18 @@ from app.models.region import Region
 from app.models.neighborhood import Neighborhood
 
 
-
 class OrderStatus(models.Model):
     STATUS_CHOICES = (
-        ('Pending', 'Pending'),
-        ('In Warehouse', 'In Warehouse'),
-        ('Delivered', 'Delivered'),
-        ('Returned', 'Returned'),
+        ("Pending", "Pending"),
+        ("In Warehouse", "In Warehouse"),
+        ("Delivered", "Delivered"),
+        ("Returned", "Returned"),
     )
 
-    status = models.CharField(max_length=255, choices=STATUS_CHOICES, default='Pending')
-
+    status = models.CharField(max_length=255, choices=STATUS_CHOICES, default="Pending")
 
     def __str__(self):
         return self.status
-    
 
 
 class Order(models.Model):
@@ -37,15 +34,18 @@ class Order(models.Model):
     recipient_email = models.EmailField(max_length=255, null=True)
     order_dimension = models.CharField(max_length=255, null=True)
     weight = models.IntegerField(null=True)
-    order_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
-    status = models.ForeignKey(OrderStatus, on_delete=models.SET_NULL, null=True, blank=True)
+    order_price = models.DecimalField(
+        max_digits=8, decimal_places=2, null=True, blank=True
+    )
+    status = models.ForeignKey(
+        OrderStatus, on_delete=models.SET_NULL, null=True, blank=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
-      
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.status_id:
-            self.status_id = OrderStatus.objects.get(status='Pending').id
+            self.status_id = OrderStatus.objects.get(status="Pending").id
 
     def save(self, *args, **kwargs):
         if not self.order_number:
@@ -64,7 +64,6 @@ class Order(models.Model):
     @classmethod
     def order_numbers(cls):
         return cls.objects.count()
-    
 
     def calculate_order_price(self):
         if self.recipient_region == self.sender.business_region:

@@ -18,6 +18,8 @@ def buisness(request):
 
 
 def get_neighborhoods(request):
-    region_id = request.GET.get('region_id')
-    neighborhoods = Neighborhood.objects.filter(region_id=region_id).values('id', 'name')
-    return JsonResponse({'neighborhoods': list(neighborhoods)})
+    region_id = request.GET.get("region_id")
+    neighborhoods = Neighborhood.objects.filter(region_id=region_id).values(
+        "id", "name"
+    )
+    return JsonResponse({"neighborhoods": list(neighborhoods)})

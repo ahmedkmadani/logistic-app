@@ -10,9 +10,10 @@ def shipment(request):
     status = ShipmentStatus.objects.all()
     return render(request, "dashboard/shipment.html", {"data": data, "status": status})
 
+
 def update_shipment(request, pk):
-    if request.method == 'POST':
-        status_id = request.POST.get('status')
+    if request.method == "POST":
+        status_id = request.POST.get("status")
         try:
             order = Order.objects.get(pk=pk)
             status = OrderStatus.objects.get(pk=status_id)
@@ -20,7 +21,7 @@ def update_shipment(request, pk):
             order.save()
             if order.status.status == "In Warehouse":
                 Shipment.objects.create(order=order)
-            return redirect('order')
+            return redirect("order")
         except Order.DoesNotExist:
             pass
-    return redirect('order')  
+    return redirect("order")

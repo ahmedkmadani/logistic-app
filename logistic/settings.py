@@ -54,7 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "logistic.urls"
@@ -127,10 +127,8 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "app", "static"),
 ]
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'app/static/'),
-)
-STATIC_ROOT = os.path.join(BASE_DIR, 'app/staticfiles/')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "app/static/"),)
+STATIC_ROOT = os.path.join(BASE_DIR, "app/staticfiles/")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "app", "media")

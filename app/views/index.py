@@ -15,13 +15,17 @@ def index(request):
     driver_number = Driver.driver_numbers()
     region_number = Region.region_numbers()
 
-    monthly_totals = Order.objects.annotate(month=ExtractMonth('created_at')).values('month').annotate(total_price=Sum('order_price')).order_by('month')
+    monthly_totals = (
+        Order.objects.annotate(month=ExtractMonth("created_at"))
+        .values("month")
+        .annotate(total_price=Sum("order_price"))
+        .order_by("month")
+    )
     price_data = [0] * 12
     for entry in monthly_totals:
-        month = entry['month']
-        total_price = entry['total_price']
+        month = entry["month"]
+        total_price = entry["total_price"]
         price_data[month - 1] = total_price
-        
 
     data = {
         "order_number": order_number,
@@ -30,4 +34,6 @@ def index(request):
         "region_number": region_number,
     }
 
-    return render(request, "dashboard/index.html", {"data": data, "price_data": price_data})
+    return render(
+        request, "dashboard/index.html", {"data": data, "price_data": price_data}
+    )

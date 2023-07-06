@@ -18,11 +18,14 @@ def order(request):
             return redirect("order")
     else:
         form = OrderForm()
-    return render(request, "dashboard/order.html", {"form": form, "data": data, "status": status})
+    return render(
+        request, "dashboard/order.html", {"form": form, "data": data, "status": status}
+    )
+
 
 def update_order(request, pk):
-    if request.method == 'POST':
-        status_id = request.POST.get('status')
+    if request.method == "POST":
+        status_id = request.POST.get("status")
         try:
             order = Order.objects.get(pk=pk)
             status = OrderStatus.objects.get(pk=status_id)
@@ -30,7 +33,7 @@ def update_order(request, pk):
             order.save()
             if order.status.status == "In Warehouse":
                 Shipment.objects.create(order=order)
-            return redirect('order')
+            return redirect("order")
         except Order.DoesNotExist:
             pass
-    return redirect('order')  
+    return redirect("order")
