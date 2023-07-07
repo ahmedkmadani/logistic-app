@@ -39,10 +39,10 @@ def get_driver_shipment(request, driver_id):
                 "id": shipment.pk,
                 "shipment_code": shipment.shipment_number,
                 "shipment_status": shipment.shipment_status.status,
+                "order_code": shipment.order.order_number
             }
             for shipment in shipments
         ]
-        print(shipments)
         return JsonResponse({"data": data})
     except Shipment.DoesNotExist:
         return JsonResponse({"error": "shipment not found"}, status=404)
