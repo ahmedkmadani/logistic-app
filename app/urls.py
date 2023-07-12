@@ -9,7 +9,7 @@ from .views.region import region
 from .views.neighborhood import neighborhood
 from .views.buisness import get_neighborhoods
 from .views.shipment import shipment, update_shipment
-from .api.order import get_order_details, assgin_driver_order, get_driver_shipment
+from .api.order import get_order_details, assgin_driver_order, get_driver_shipment, deliver_shipment
 
 urlpatterns = [
     path("", view=login, name="login"),
@@ -33,5 +33,10 @@ urlpatterns = [
         "api/shipment_driver/<int:driver_id>",
         get_driver_shipment,
         name="get_driver_shipment",
+    ),
+      path(
+        "api/deliver_shipment/<str:order_number>/",
+        deliver_shipment,
+        name="deliver_shipment",
     ),
 ]

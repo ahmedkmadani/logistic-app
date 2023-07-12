@@ -1,4 +1,4 @@
-from app.models.order import Order
+from app.models.order import Order, OrderStatus
 from app.models.shippment import Shipment, ShipmentStatus
 from app.models.driver import Driver
 from django.http import JsonResponse
@@ -47,5 +47,21 @@ def get_driver_shipment(request, driver_id):
             for shipment in shipments
         ]
         return JsonResponse({"data": data})
+    except Shipment.DoesNotExist:
+        return JsonResponse({"error": "shipment not found"}, status=404)
+
+
+def deliver_shipment(requst, order_number):
+    try:
+        shipment = Shipment.objects.get(order__order_number=order_number)
+        delivered_status = ShipmentStatus.objects.get(status="Delivered")
+        shipment.shipment_status = delivered_status
+        shipment.save()
+
+        order = Order.objects.get(order_number=order_number)
+        delivered_status = OrderStatus.objects.get(status="Delivered")
+        order.status = delivered_status
+        order.save()
+        return JsonResponse({"data": shipment.pk})
     except Shipment.DoesNotExist:
         return JsonResponse({"error": "shipment not found"}, status=404)
