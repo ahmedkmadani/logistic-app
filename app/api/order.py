@@ -12,6 +12,9 @@ def get_order_details(request, order_number):
             "recipient_name": order.recipient_name,
             "recipient_address": order.recipient_address,
             "recipient_neighborhood": order.recipient_neighborhood.name,
+            "recipient_phone_number": order.recipient_phone_number,
+            "order_dimension": order.order_dimension,
+            "weight": order.weight,
             "status": order.status.status,
         }
         return JsonResponse(order_details)
