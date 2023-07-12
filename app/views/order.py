@@ -12,7 +12,12 @@ def order(request):
         form = OrderForm(request.POST)
         if form.is_valid():
             order = form.save()
+            
             pdf_filepath = generate_order_pdf(order)
+
+            order.pdf_filepath = pdf_filepath
+            order.save()
+
             print(pdf_filepath)
 
             return redirect("order")

@@ -13,6 +13,8 @@ def generate_order_pdf(order):
     # Generate a unique filename for the PDF
     filename = f"order_{order.order_number}.pdf"
     filepath = os.path.join(settings.MEDIA_ROOT, "pdf", filename)
+    app_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    relative_filepath = os.path.relpath(filepath, app_root)
 
     # Create a canvas and set the PDF properties
     c = canvas.Canvas(filepath, pagesize=letter)
@@ -51,4 +53,4 @@ def generate_order_pdf(order):
     c.save()
 
     # Return the file path for further use
-    return filepath
+    return relative_filepath

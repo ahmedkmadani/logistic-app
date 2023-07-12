@@ -34,6 +34,7 @@
                                 <th>Order price</th>
                                 <th>Order status</th>
                                 <th>Edit status</th>
+                                <th>View</th>
                                 <th>Created at</th>
                             </tr>
                         </thead>
@@ -55,6 +56,11 @@
                                   <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal"
                                       data-target="#editStatusModal{{ order.pk }}"><i class="fas fa-edit fa-sm text-white-50"></i>
                                       Edit Status </button>
+                              </td>
+                              <td>
+                                <a href="{{ order.pdf_filepath }}" type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">
+                                  <i class="fas fa-edit fa-sm text-white-50"></i> View PDF
+                                </a>
                               </td>
                                 <td>{{ order.created_at }}</td>
                             </tr>
